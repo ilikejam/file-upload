@@ -8,11 +8,10 @@ from werkzeug.security import check_password_hash
 files = "/files"
 passwd = "/passwd"
 
-with open(passwd, "r") as p:
-    auth = json.load(p)
-
 
 def authenticated(user, password):
+    with open(passwd, "r") as p:
+        auth = json.load(p)
     return user in auth and check_password_hash(auth[user], password)
 
 
