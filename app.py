@@ -2,7 +2,7 @@ import json
 import sys
 from pathlib import Path
 
-from bottle import auth_basic, request, route, run, static_file
+from bottle import abort, auth_basic, request, route, run, static_file
 from werkzeug.security import check_password_hash
 
 files = "/files"
@@ -25,7 +25,10 @@ def index():
 @auth_basic(authenticated)
 def do_upload():
     upload = request.files.get("file")
-    upload.save(f"{files}/{upload.filename}")
+    try:
+        upload.save(f"{files}/{upload.filename}")
+    except IOError as e:
+        abort(500, str(e))
     return f"File uploaded as {upload.filename}"
 
 
