@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<script>
+  function uploadFile() {
+    var fileInput = document.getElementById('fileUpload');
+    var file = fileInput.files[0];
+
+    if (file) {
+        var formData = new FormData();
+        formData.append('file', file);
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener('progress', function (event) {
+            if (event.lengthComputable) {
+                var percent = Math.round((event.loaded / event.total) * 100);
+                var progressBar = document.getElementById('progressBar');
+                progressBar.style.width = percent + '%';
+            }
+        });
+
+        xhr.addEventListener('load', function (event) {
+            var uploadStatus = document.getElementById('uploadStatus');
+            uploadStatus.innerHTML = event.target.responseText;
+        });
+
+        xhr.open('POST', '/newfile', true);
+        xhr.send(formData);
+    }
+  }
+</script>
+<style>
+  .prog {
+      width: 100%;
+      background-color: lightgrey;
+  }
+  .progBar {
+      width: 0%;
+      height: 20px;
+      background-color: green;
+  }
+  .top {
+      font-family: sans-serif;
+  }
+  .content {
+      padding: 5% calc(10px + 9.0vw) 0% calc(10px + 9.0vw);
+  }
+</style>
+<div class="top">
+  <div class="content">
+    <h2>Upload file</h2>
+    <input type="file" id="fileUpload" />
+    <br>
+    <br>
+    <button onclick="uploadFile()">Upload</button>
+    <br>
+    <br>
+    <div class="prog">
+        <div id="progressBar" class="progBar"></div>
+    </div>
+    <br>
+    <div id="uploadStatus"></div>
+  </div>
+</div>
