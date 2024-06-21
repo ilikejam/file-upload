@@ -3,13 +3,13 @@
 <script>
   function uploadFile() {
       var uploadButton = document.getElementById('uploadButton');
-      uploadButton.disabled = true;
       var uploadStatus = document.getElementById('uploadStatus');
-      uploadStatus.innerHTML = ""
       var fileInput = document.getElementById('fileUpload');
       var file = fileInput.files[0];
 
       if (file) {
+          uploadButton.disabled = true;
+          uploadStatus.innerHTML = ""
           var formData = new FormData();
           formData.append('file', file);
 
