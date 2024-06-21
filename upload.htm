@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <script>
   function uploadFile() {
-    var fileInput = document.getElementById('fileUpload');
-    var file = fileInput.files[0];
+      var uploadButton = document.getElementById('uploadButton');
+      uploadButton.disabled = true;
+      var uploadStatus = document.getElementById('uploadStatus');
+      uploadStatus.innerHTML = ""
+      var fileInput = document.getElementById('fileUpload');
+      var file = fileInput.files[0];
 
-    if (file) {
-        var formData = new FormData();
-        formData.append('file', file);
+      if (file) {
+          var formData = new FormData();
+          formData.append('file', file);
 
-        var xhr = new XMLHttpRequest();
+          var xhr = new XMLHttpRequest();
 
-        xhr.upload.addEventListener('progress', function (event) {
-            if (event.lengthComputable) {
-                var percent = Math.round((event.loaded / event.total) * 100);
-                var progressBar = document.getElementById('progressBar');
-                progressBar.style.width = percent + '%';
-            }
-        });
+          xhr.upload.addEventListener('progress', function (event) {
+              if (event.lengthComputable) {
+                  var percent = Math.round((event.loaded / event.total) * 100);
+                  var progressBar = document.getElementById('progressBar');
+                  progressBar.style.width = percent + '%';
+              }
+          });
 
-        xhr.addEventListener('load', function (event) {
-            var uploadStatus = document.getElementById('uploadStatus');
-            uploadStatus.innerHTML = event.target.responseText;
-        });
+          xhr.addEventListener('load', function (event) {
+              uploadStatus.innerHTML = event.target.responseText;
+              uploadButton.disabled = false;
+          });
 
-        xhr.open('POST', '/newfile', true);
-        xhr.send(formData);
-    }
+          xhr.open('POST', '/newfile', true);
+          xhr.send(formData);
+      }
   }
 </script>
 <style>
@@ -51,11 +55,11 @@
     <input type="file" id="fileUpload" />
     <br>
     <br>
-    <button onclick="uploadFile()">Upload</button>
+    <button id="uploadButton" onclick="uploadFile()">Upload</button>
     <br>
     <br>
     <div class="prog">
-        <div id="progressBar" class="progBar"></div>
+      <div id="progressBar" class="progBar"></div>
     </div>
     <br>
     <div id="uploadStatus"></div>
